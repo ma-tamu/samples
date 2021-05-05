@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<title>Insert title here</title>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('#bth1').on('click', function() {
+    let url = '[[@{/update}]]';
+    let param = $('#myForm').serialize();
+    let uri = url.indexOf('?') === -1 ? url + "?" + param : url + "&" + param;
+    paging(uri);
+  });
+  $('#btn2').on('click', function() {
+    $.ajax({
+        type: 'GET',
+        url: '[[@{/show}]]',
+        dataType : 'html'
+      })
+      // Ajaxリクエストが成功した場合
+      .done(function(data){
+        console.log(data);
+        $('#resultImg').html(data);
+      })
+      // Ajaxリクエストが失敗した場合
+      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+        alert(errorThrown);
+        $("html").html(XMLHttpRequest.responseText);
+      });
+  });
+  $('#btn3').on('click', function() {
+	    $.ajax({
+	        type: 'GET',
+	        url: '[[@{/exception}]]',
+	        dataType : 'html'
+	      })
+	      // Ajaxリクエストが成功した場合
+	      .done(function(data){
+	        console.log(data);
+	        $('#resultImg').html(data);
+	      })
+	      // Ajaxリクエストが失敗した場合
+	      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+	        alert(errorThrown);
+	        $("html").html(XMLHttpRequest.responseText);
+	      });
+	  });
+
+});
+
+function paging(url) {
+  $.ajax({
+      type: 'GET',
+      url: url,
+      dataType : 'html'
+    })
+    // Ajaxリクエストが成功した場合
+    .done(function(data){
+      console.log(data);
+      $('#result').html(data);
+    })
+    // Ajaxリクエストが失敗した場合
+    .fail(function(XMLHttpRequest, textStatus, errorThrown){
+      alert(errorThrown);
+      $("html").html(XMLHttpRequest.responseText);
+    });
+}
+
+</script>
+</head>
+<body>
+<form action="update" method="get" id="myForm" onsubmit="return false">
+<div class="container-fluid border">
+  <div class="row border">
+    <div class="col">header1</div>
+    <div class="col">header2</div>
+    <div class="col">header3</div>
+  </div>
+  <div id="result">
+    <div th:replace="list::list"/>
+  </div>
+  <input type="text" name="keyword">
+  <button class="btn btn-secondary" id="bth1">検索</button>
+</div>
+</form>
+<button class="btn btn-secondary" id="btn2">画像表示</button>
+<div id="resultImg"></div>
+<button class="btn btn-secondary" id="btn3">例外</button>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<th:block th:fragment="list">
+  <div class="row border" th:each="elem : ${list}">
+    <div class="col" th:text=${elemStat.index}>row1-2</div>
+    <div class="col" th:text="${elem}">row1-2</div>
+    <div class="col" th:text="${elemStat.count}">row1-3</div>
+  </div>
+  <ul>
+    <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+      <span th:if="${page.first}">&lt;&lt;</span>
+      <a th:if="${not page.first}" href="#" th:attr="onclick='paging(\''+@{/update(page=0)}+'\')'">&lt;&lt;</a>
+    </li>
+    <li th:each='i : ${#numbers.sequence(0, page.totalPages-1)}' th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+      <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+      <a th:if='${i}!=${page.number}' href="#" th:attr="onclick='paging(\''+@{/update(page=${i})}+'\')'">
+        <span th:text='${i+1}'>1</span>
+      </a>
+    </li>
+    <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+        <span th:if="${page.last}">&gt;&gt;</span>
+        <a th:if="${not page.last}" href="#" th:attr="onclick='paging(\''+@{/update(page=${page.totalPages}-1)}+'\')'">&gt;&gt;</a>
+    </li>
+  </ul>
+</th:block>
